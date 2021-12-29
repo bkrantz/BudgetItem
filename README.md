@@ -40,7 +40,20 @@ make build-docker
 make run-docker
 ```
 
+### Building/Running Tests Locally
 
-### Run Tests
-Assumes project is installed locally.
-
+- Create .env file in project root with the following configs
+  - SQLALCHEMY_DATABASE_URI
+  - SQLALCHEMY_TRACK_MODIFICATIONS
+- Install Project dependencies
+```
+make dependencies
+```
+- Create python virtual environment
+```
+make install-dev
+```
+- Run
+```
+make run
+```

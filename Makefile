@@ -50,6 +50,9 @@ run:
 		&& export FLASK_APP=src/app \
 		&& flask run --host=0.0.0.0
 
+test:
+	pytest
+	
 build-docker:
 	docker build . -t budget:0.0.1
 
