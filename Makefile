@@ -2,11 +2,28 @@ SHELL := /bin/bash
 
 PYTHON_EXE := env/bin/python
 
+.PHONY: dependencies install-docker clean install install-dev run build-docker run-docker migrate reset-migration
+
+test:
+
 dependencies:
+	@#sripts to install project dependencies
+	@#see also Dockerfile
+	sudo apt-get update
+	sudo apt-get install -y software-properties-common
+	sudo add-apt-repository ppa:deadsnakes/ppa
+	sudo apt-get update
 	sudo apt-get install -y make \
 		python3.7-dev \
 		python3.7-venv \
-		python3-pip
+		python3-pip \
+		libmysqlclient-dev \
+		default-libmysqlclient-dev \
+		build-essential \
+		mysql-client
+
+install-docker:
+	@#scripts to install docker on VM
 	sudo apt update
 	sudo apt install apt-transport-https ca-certificates curl software-properties-common
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -15,11 +32,6 @@ dependencies:
 	sudo apt install docker-ce
 	sudo usermod -aG docker ${USER}
 	su - ${USER}
-	sudo apt-get install -y \
-		libmysqlclient-dev \
-		python-mysqldb \
-		default-libmysqlclient-dev \
-		build-essential
 
 clean:
 	rm -rf env
@@ -27,8 +39,10 @@ clean:
 
 install: clean
 	python3.7 -m venv env
+	${PYTHON_EXE} -m pip install -r requirements.txt
 
-install-dev: install
+install-dev: clean
+	python3.7 -m venv env
 	${PYTHON_EXE} -m pip install -r requirements_dev.txt
 
 run:
@@ -40,7 +54,7 @@ build-docker:
 	docker build . -t budget:0.0.1
 
 run-docker:
-	docker run -p 5000:5000 budget:0.0.1 
+	docker run --network=host budget:0.0.1 #-p 5000:5000
 
 migrate:
 	source env/bin/activate \
@@ -54,9 +68,3 @@ reset-migration:
 		&& export FLASK_APP=src/app \
 		&& (flask db downgrade &> /dev/null || true) \
 		&& flask db upgrade
-	
-alembic-revision:
-	alembic revision --autogenerate -m "commit"
-
-alembic-migrate:
-	alembic upgrade head
