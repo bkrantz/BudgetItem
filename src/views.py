@@ -30,7 +30,6 @@ def get_budget_items():
 		return NO_CONTENT_RESPONSE, 204
 	return {"budget_items": [b.to_json() for b in budget_items]}, 200
 
-
 # POST single new budget_item
 @app.route('/budget_items', methods=['POST'])
 def create_budget_item():
@@ -61,7 +60,7 @@ def remove_budget_item():
 		return NO_CONTENT_RESPONSE, 204
 	db.session.delete(budget_items[0])
 	db.session.commit()
-	return {"budget_items": [budget_item[0].to_json()]}, 200
+	return {"budget_items": [budget_items[0].to_json()]}, 200
 
 # PUT single update to existing budget_item
 @app.route('/budget_items', methods=['PUT'])

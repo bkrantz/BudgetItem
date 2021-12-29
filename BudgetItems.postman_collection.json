@@ -1,0 +1,658 @@
+{
+	"info": {
+		"_postman_id": "f01a5475-da74-4936-8363-f408c57d47f6",
+		"name": "BudgetItems",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Budget Item (All - No Content)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Budget Item (By Budget - No Content)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items/by_budget/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items",
+						"by_budget",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Budget Item (By Item - No Content)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items/by_item/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items",
+						"by_item",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Budget Item (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 1;",
+							"tests[\"Budget Id Present\"] = typeof jsonData.budget_items[0].budget_id === \"number\";",
+							"tests[\"Created On Present\"] = typeof jsonData.budget_items[0].created_on === \"string\";",
+							"tests[\"Display Name Present\"] = typeof jsonData.budget_items[0].display_name === \"string\";",
+							"tests[\"Item Id Present\"] = typeof jsonData.budget_items[0].item_id === \"number\";",
+							"tests[\"Parent Id Present\"] = jsonData.budget_items[0].parent_id === null;",
+							"tests[\"Value Present\"] = typeof jsonData.budget_items[0].value === \"string\";",
+							"",
+							"pm.collectionVariables.set('parent_id', jsonData.budget_items[0].item_id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"display_name\": \"Income\",\n    \"value\": 100.00,\n    \"budget_id\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Budget Item 2 (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 1;",
+							"tests[\"Budget Id Present\"] = typeof jsonData.budget_items[0].budget_id === \"number\";",
+							"tests[\"Created On Present\"] = typeof jsonData.budget_items[0].created_on === \"string\";",
+							"tests[\"Display Name Present\"] = typeof jsonData.budget_items[0].display_name === \"string\";",
+							"tests[\"Item Id Present\"] = typeof jsonData.budget_items[0].item_id === \"number\";",
+							"tests[\"Parent Id Present\"] = typeof jsonData.budget_items[0].parent_id === \"number\";",
+							"tests[\"Value Present\"] = typeof jsonData.budget_items[0].value === \"string\";",
+							"",
+							"pm.collectionVariables.set('child_id', jsonData.budget_items[0].item_id);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"display_name\": \"Interest\",\n    \"value\": 200.00,\n    \"budget_id\": 1,\n    \"parent_id\": {{parent_id}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Budget Item 3 (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 1;",
+							"tests[\"Budget Id Present\"] = typeof jsonData.budget_items[0].budget_id === \"number\";",
+							"tests[\"Created On Present\"] = typeof jsonData.budget_items[0].created_on === \"string\";",
+							"tests[\"Display Name Present\"] = typeof jsonData.budget_items[0].display_name === \"string\";",
+							"tests[\"Item Id Present\"] = typeof jsonData.budget_items[0].item_id === \"number\";",
+							"tests[\"Parent Id Present\"] = jsonData.budget_items[0].parent_id === null;",
+							"tests[\"Value Present\"] = typeof jsonData.budget_items[0].value === \"string\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"display_name\": \"Expenses\",\n    \"value\": 300.00,\n    \"budget_id\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Budget Item (Failed Validation)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"display_name\": \"Interest\",\n    \"budget_id\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Budget Item (All - Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 3;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Budget Item (By Budget - Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 2;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items/by_budget/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items",
+						"by_budget",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Budget Item (By Item - Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 1;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items/by_item/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items",
+						"by_item",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Budget Item (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 1;",
+							"tests[\"Budget Id Present\"] = jsonData.budget_items[0].budget_id === 1;",
+							"tests[\"Value Present\"] = jsonData.budget_items[0].value === \"400\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"item_id\": {{parent_id}},\n    \"value\": 400\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Budget Item (Failed Validation)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"value\": 900\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Budget Item (Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 1;",
+							"tests[\"Budget Id Present\"] = typeof jsonData.budget_items[0].budget_id === \"number\";",
+							"tests[\"Created On Present\"] = typeof jsonData.budget_items[0].created_on === \"string\";",
+							"tests[\"Display Name Present\"] = typeof jsonData.budget_items[0].display_name === \"string\";",
+							"tests[\"Item Id Present\"] = typeof jsonData.budget_items[0].item_id === \"number\";",
+							"tests[\"Parent Id Present\"] = typeof jsonData.budget_items[0].parent_id === \"number\";",
+							"tests[\"Value Present\"] = typeof jsonData.budget_items[0].value === \"string\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"item_id\": {{child_id}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Budget Item (No Content)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"item_id\": {{child_id}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Budget Item (Failed Validation)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"value\": 900\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Budget Item 2 (All - Success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"tests[\"Budget Item Count\"] = jsonData.budget_items.length === 2;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/budget_items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"budget_items"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "parent_id",
+			"value": ""
+		},
+		{
+			"key": "child_id",
+			"value": ""
+		}
+	]
+}

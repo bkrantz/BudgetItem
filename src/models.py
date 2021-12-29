@@ -6,7 +6,7 @@ class BudgetItem(db.Model):
     item_id         = db.Column(db.Integer, primary_key=True, autoincrement=True)
     budget_id       = db.Column(db.Integer)
     display_name    = db.Column(db.String(255))
-    value           = db.Column(db.DECIMAL(10, 2))
+    value           = db.Column(db.Numeric(12))
     parent_id       = db.Column(db.Integer, db.ForeignKey('budget_items.item_id'), nullable=True)
     created_on      = db.Column(db.TIMESTAMP, server_default=db.text("CURRENT_TIMESTAMP"))
 
