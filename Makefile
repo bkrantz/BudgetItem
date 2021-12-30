@@ -2,9 +2,7 @@ SHELL := /bin/bash
 
 PYTHON_EXE := env/bin/python
 
-.PHONY: dependencies install-docker clean install install-dev run build-docker run-docker migrate reset-migration
-
-test:
+.PHONY: dependencies install-docker clean install install-dev run build-docker run-docker migrate reset-migration test
 
 dependencies:
 	@#sripts to install project dependencies
@@ -35,6 +33,7 @@ install-docker:
 
 clean:
 	rm -rf env
+	rm -rf .pytest_cache
 	find . -type d -name  "__pycache__" -exec rm -r {} +
 
 install: clean
